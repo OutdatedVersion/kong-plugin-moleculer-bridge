@@ -1,3 +1,4 @@
+
 local nats = require 'nats'
 local json = require 'cjson'
 local uuid = require 'uuid'
@@ -61,26 +62,4 @@ function MoleculerClient:send (request, callback)
   self.nats_client:publish(subject, json.encode(payload))
 end
 
-
-
-client = MoleculerClient:new({
-  node_id = 'lua-client',
-})
-client:connect({
-  host = '127.0.0.1',
-  port = 4222,
-})
-
-client:send(
-  {
-    node_id = 'one',
-    action = 'test.hi',
-    data = '{}',
-  },
-  function(response)
-    print(response.id)
-  end
-)
-
--- TODO: move to background loop
-client.nats_client:wait(5)
+return MoleculerClient
