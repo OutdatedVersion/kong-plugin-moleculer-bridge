@@ -17,6 +17,5 @@ return {
       },
     },
   },
-  entity_checks = {
-  },
+  entity_checks = {},
 }

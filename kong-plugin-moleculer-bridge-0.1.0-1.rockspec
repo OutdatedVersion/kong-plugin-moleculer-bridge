@@ -9,13 +9,13 @@ local pluginName = package:match("^kong%-plugin%-(.+)$")
 
 supported_platforms = {"linux"}
 source = {
-  url = "",
+  url = "https://github.com/OutdatedVersion/kong-plugin-moleculer-bridge",
 }
 
 description = {
-  summary = "idk",
-  homepage = "",
-  license = ""
+  summary = "Basic proof-of-cocept for a Moleculer protocol/HTTP compatibility layer",
+  homepage = "https://github.com/OutdatedVersion/kong-plugin-moleculer-bridge",
+  license = "MIT"
 }
 
 dependencies = {

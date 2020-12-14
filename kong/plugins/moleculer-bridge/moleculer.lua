@@ -1,4 +1,3 @@
-
 local nats = require 'nats'
 local json = require 'cjson'
 local uuid = require 'uuid'
@@ -26,7 +25,7 @@ function MoleculerClient:connect (options)
   self.nats_client = nats.connect(options)
   self.nats_client:connect()
 
-  -- self check, let's declare we're really up and going
+  -- self check, let's make sure we're really up and going
   self.nats_client:ping()
 
   -- setup subscription for responses
@@ -38,7 +37,7 @@ function MoleculerClient:connect (options)
     if handler ~= nil then
       handler(packet)
     end 
- end)
+  end)
   
   print('Connected to NATS as ' .. self.node_id)
   print('Listening for responses on ' .. response_nats_subject)
@@ -48,8 +47,6 @@ function MoleculerClient:send (request, callback)
   assert(request.action ~= nil and request.action ~= '', 'action must be defined')
 
   local request_id = uuid()
-
-  local subject = 'MOL.REQ.' .. request.node_id
   local payload = {
     ver = '4',
     sender = self.node_id,
@@ -58,8 +55,13 @@ function MoleculerClient:send (request, callback)
     action = request.action,
   }
 
+  if request.data ~= nil then
+    assert(type(request.data) == 'table', 'moleculer request data must be a json object')
+    request.params = json.encode(request.data)
+  end
+
   self.request_handlers[request_id] = callback
-  self.nats_client:publish(subject, json.encode(payload))
+  self.nats_client:publish('MOL.REQ.' .. request.node_id, json.encode(payload))
 end
 
 return MoleculerClient

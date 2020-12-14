@@ -29,21 +29,18 @@ function MoleculerBridge:response(config)
     port = 4222,
   })
 
-  local serialized = 'unknown';
-  
   client:send(
     {
-      node_id = 'one',
+      node_id = 'remote_node',
       action = 'test.hi',
-      data = '{}',
+      data = {},
     },
     function(response)
-      serialized = json.encode(response)
+      ngx.say(json.encode(response))
     end
   )
   
   client.nats_client:wait(1)
-  ngx.say(serialized)
 end
 
 return MoleculerBridge
